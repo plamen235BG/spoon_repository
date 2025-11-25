@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const AppDataSource = require("../config/database");
+const { In } = require("typeorm");
 
 router.post("/", async (req, res) => {
   try {
@@ -46,7 +47,7 @@ router.get("/", async (req, res) => {
   try {
     const studentRepo = AppDataSource.getRepository("Student");
     const students = await studentRepo.find({
-      relations: ["university"],
+      relations: ["university", "subjects"],
     });
 
     res.json(students);

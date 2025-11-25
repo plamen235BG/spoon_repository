@@ -66,7 +66,12 @@
       <a routerLink="/university" style="color: var(--p-primary-color); text-decoration: none;">
         → Manage Universities
       </a>
+      <a routerLink="/subjects" style="color: var(--p-primary-color); text-decoration: none;">
+        → Manage Subjects
+      </a>
     </div>
+
+    
 
     <span class="title">Student Form</span>
 
@@ -142,6 +147,19 @@
         </span>
       </div>
 
+      <div class="form-field">
+        <label for="subjectIds">Subjects</label>
+        <p-multiSelect
+          id="subjectIds"
+          [options]="subjectOptions"
+          formControlName="subjectIds"
+          optionLabel="label"
+          display="chip"
+          defaultLabel="Select subjects"
+          [style]="{ width: '100%' }"
+        ></p-multiSelect>
+      </div>
+
       <div class="submit-button w-full" style="display: flex; gap: 0.5rem;">
         <p-button 
           type="submit" 
@@ -174,6 +192,7 @@
             <th>Middle Name</th>
             <th>Last Name</th>
             <th>University</th>
+            <th>Subjects</th>
             <th>Actions</th>
           </tr>
         </ng-template>
@@ -184,6 +203,7 @@
             <td>{{ student.middleName || '-' }}</td>
             <td>{{ student.lastName }}</td>
             <td>{{ getUniversityName(student) }}</td>
+            <td>{{ getSubjectName(student) }}</td>
             <td>
               <div style="display: flex; gap: 0.5rem;">
                 <p-button

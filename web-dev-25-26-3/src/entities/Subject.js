@@ -9,20 +9,32 @@ module.exports = new EntitySchema({
     id: {
       // TODO: Define as primary key, integer, auto-generated
       // Hint: Look at Student.js line 7-11
+      primary: true,
+      type: "integer",
+      generated: true,
     },
     name: {
       // TODO: Define as varchar, required (nullable: false)
       // Hint: Look at University.js line 12-15
+      type: "varchar",
+      nullable: false,
+      unique: true,
     },
     code: {
       // TODO: Define as varchar, required, unique
       // Examples: "CS101", "MATH201", "ENG102"
       // Hint: Look at Student.js line 12-16 for unique constraint
+      type: "varchar",
+      nullable: false,
+      unique: true,
     },
     credits: {
       // TODO: Define as integer, required
       // Examples: 3, 4, 6 credits
       // Hint: Use type: "integer"
+      type: "integer",
+      nullable: false,
+      unique: false,
     },
   },
   relations: {
@@ -37,6 +49,13 @@ module.exports = new EntitySchema({
       // - type: "many-to-many"
       // - joinTable: { name: "student_subjects" }
       // - inverseSide: "subjects"
+      target: "Student",
+      type: "many-to-many",
+      inverseSide: "subjects",
+      
+      joinTable: {
+        name: "student_subjects",
+      },
     },
   },
 });

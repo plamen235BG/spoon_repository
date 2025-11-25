@@ -21,8 +21,11 @@ module.exports = new EntitySchema({
   relations: {
     students: {
       target: "Student",
-      type: "one-to-many",
-      inverseSide: "university",
+      type: "many-to-many",
+      inverseSide: "subjects",
+      joinTable: {
+        name: "student_subjects", // Join table name
+      },
     },
   },
 });

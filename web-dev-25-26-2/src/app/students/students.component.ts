@@ -7,7 +7,8 @@ import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
-import { ApiService, Student, University } from '../services/api.service';
+import { ApiService, Student, University, AppSubject } from '../services/api.service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-students',
@@ -21,6 +22,7 @@ import { ApiService, Student, University } from '../services/api.service';
     ReactiveFormsModule,
     TableModule,
     SelectModule,
+    MultiSelectModule,
   ],
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
@@ -32,6 +34,9 @@ export class StudentsComponent implements OnInit {
   loading = false;
   error: string | null = null;
   editingStudent: Student | null = null;
+  
+  allSubjects: AppSubject[] = [];
+  subjectOptions: { label: string; value: number }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -42,13 +47,30 @@ export class StudentsComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       middleName: [''],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
-      universityId: ['', [Validators.required]]
+      universityId: ['', [Validators.required]],
+      subjectIds: [[]],
     });
   }
 
   ngOnInit() {
     this.loadStudents();
     this.loadUniversities();
+    this.loadSubjects(); 
+  }
+  loadSubjects() {
+    this.apiService.getSubjects().subscribe({
+      next: (subjects) => {
+        this.allSubjects = subjects;
+        this.subjectOptions = subjects.map(s => ({
+          label: `${s.name} (${s.code})`,
+          value: s.id as number,
+        }));
+      },
+      error: (err) => {
+        console.error('Error loading subjects:', err);
+        // няма да показваме отделно съобщение, за да не пречи
+      }
+    });
   }
 
   loadStudents() {
@@ -92,7 +114,8 @@ export class StudentsComponent implements OnInit {
         firstName: formValue.firstName,
         middleName: formValue.middleName || undefined,
         lastName: formValue.lastName,
-        universityId: formValue.universityId
+        universityId: formValue.universityId,
+        subjectIds: formValue.subjectIds || [],
       };
 
       if (this.editingStudent?.id) {
@@ -139,7 +162,8 @@ export class StudentsComponent implements OnInit {
       firstName: student.firstName,
       middleName: student.middleName || '',
       lastName: student.lastName,
-      universityId: student.universityId || student.university?.id
+      universityId: student.universityId || student.university?.id ,
+      subjectIds: (student.subjects || []).map(s => s.id),
     });
     // Scroll to form
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -149,7 +173,12 @@ export class StudentsComponent implements OnInit {
     this.editingStudent = null;
     this.registrationForm.reset();
   }
-
+  getSubjectName(student: Student): string {
+    if (!student.subjects || student.subjects.length === 0) {
+      return '-';
+    }
+    return student.subjects.map(s => s.name).join(', ');
+  }
   deleteStudent(student: Student) {
     if (!student.id) return;
     
