@@ -25,11 +25,10 @@ module.exports = new EntitySchema({
     },
   },
   relations: {
-    // обратната страна на many-to-many
     students: {
       target: "Student",
       type: "many-to-many",
-      inverseSide: "subjects", // името на relation-а в Student.js
+      inverseSide: "subjects",
     },
   },
 });

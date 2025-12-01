@@ -24,7 +24,7 @@ module.exports = new EntitySchema({
       type: "many-to-many",
       inverseSide: "subjects",
       joinTable: {
-        name: "student_subjects", // Join table name
+        name: "student_subjects",
       },
     },
   },
