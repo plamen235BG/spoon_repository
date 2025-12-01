@@ -36,13 +36,12 @@ module.exports = new EntitySchema({
       },
       nullable: false,
     },
-    // TODO: Add many-to-many relationship with Subject
-    // This is the inverse side of the relationship defined in Subject.js
-    // Example:
-     subjects: {
-       target: "Subject",
-       type: "many-to-many",
-       inverseSide: "students",
-     },
+
+    // Owning side на many-to-many
+    subjects: {
+      target: "Subject",
+      type: "many-to-many",
+      joinTable: true,   // НИЩО друго тук – оставяме TypeORM сам да си ги кръсти
+    },
   },
 });

@@ -6,7 +6,7 @@ const Subject = require("../entities/Subject");
 
 const AppDataSource = new DataSource({
   type: "sqlite",
-  database: "database2.sqlite",
+  database: "database00.sqlite",
   synchronize: true,
   logging: false,
   entities: [University, Student, Subject], // TODO: Add Subject to this array
